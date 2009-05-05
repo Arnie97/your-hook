@@ -1,7 +1,7 @@
 [Project]
-FileName=MyHook-1.2.dev
+FileName=myhook.dev
 Name=MyHook
-UnitCount=5
+UnitCount=7
 Type=1
 Ver=1
 ObjFiles=
@@ -96,4 +96,24 @@ OriginalFilename=
 ProductName=
 ProductVersion=
 AutoIncBuildNr=0
+
+[Unit6]
+FileName=LogType.cpp
+CompileCpp=1
+Folder=MyHook
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit7]
+FileName=LogType.h
+CompileCpp=1
+Folder=MyHook
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
 

