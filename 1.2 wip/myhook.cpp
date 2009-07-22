@@ -3,7 +3,7 @@
   * @date May 1, 2009
   * @author Daniel Amodio, Patrick Servello
   *
-  * MyHook 1.2
+  * MyHook 1.3
   * Origional Code and Concept Copyright 2008 Daniel Amodio (deige101)
   * Created for Major League Coding
   * http://groups.myspace.com/MajorLeagueCoding

