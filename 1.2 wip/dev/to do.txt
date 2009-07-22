@@ -1,0 +1,8 @@
+LogType class
+
+multiple processes log twice
+hiding should not show at all
+  both, I believe, will require turning into a windows application
+
+check bug tracker
+check feature requests
