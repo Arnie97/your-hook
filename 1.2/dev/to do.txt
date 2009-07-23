@@ -1,0 +1,11 @@
+LogType class (more types of logging... email... etc)
+
+multiple processes log twice
+hiding should not show at all
+  both, I believe, will require turning into a windows application
+  Will plan on having it run in service mode soon.
+
+check bug tracker
+check feature requests
+
+allow to compile with many different icons to help hiding in whatever fashion (check legality of supplying windows icons)
