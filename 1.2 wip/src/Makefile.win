@@ -4,7 +4,7 @@
 CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
-RES  = 
+RES  = ../obj/myhook_private.res
 OBJ  = ../obj/DataLog.o ../obj/KeyLogger.o ../obj/myhook.o $(RES)
 LINKOBJ  = ../obj/DataLog.o ../obj/KeyLogger.o ../obj/myhook.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib"  
@@ -32,5 +32,8 @@ $(BIN): $(OBJ)
 ../obj/KeyLogger.o: core/KeyLogger.cpp core/KeyLogger.h core/DataLog.h   C:/Dev-Cpp/include/windows.h C:/Dev-Cpp/include/stdio.h   C:/Dev-Cpp/include/sys/types.h
 	$(CPP) -c core/KeyLogger.cpp -o ../obj/KeyLogger.o $(CXXFLAGS)
 
-../obj/myhook.o: core/myhook.cpp C:/Dev-Cpp/include/c++/3.4.2/cstdlib   C:/Dev-Cpp/include/windows.h C:/Dev-Cpp/include/time.h   C:/Dev-Cpp/include/c++/3.4.2/string core/DataLog.h core/KeyLogger.h   logtypes/LogType.h
+../obj/myhook.o: core/myhook.cpp C:/Dev-Cpp/include/c++/3.4.2/cstdlib   C:/Dev-Cpp/include/windows.h C:/Dev-Cpp/include/time.h   C:/Dev-Cpp/include/c++/3.4.2/string core/DataLog.h core/KeyLogger.h
 	$(CPP) -c core/myhook.cpp -o ../obj/myhook.o $(CXXFLAGS)
+
+../obj/myhook_private.res: myhook_private.rc ../src/Resources.rc 
+	$(WINDRES) -i myhook_private.rc --input-format=rc -o ../obj/myhook_private.res -O coff  --include-dir ../res --include-dir ../res/icons

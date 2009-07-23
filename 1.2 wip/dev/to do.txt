@@ -6,3 +6,5 @@ hiding should not show at all
 
 check bug tracker
 check feature requests
+
+allow to compile with many different icons to help hiding in whatever fashion
