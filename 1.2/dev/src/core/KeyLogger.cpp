@@ -1,7 +1,7 @@
 /**
   * @file KeyLogger.cpp
   * @author Daniel Amodio, Greg Siegel
-  * @date May 1, 2009
+  * @date July 27, 2009
   */
   
 #include "KeyLogger.h"
@@ -10,13 +10,13 @@
 // Static member initialization
 KeyLogger *KeyLogger::objPointer = NULL;
 
-KeyLogger::KeyLogger(DataLog &newDataLog)
+KeyLogger::KeyLogger(LogType &newDataLog)
 {
      datalog = &newDataLog;
      objPointer = this;
 }
 
-KeyLogger::KeyLogger(LogTypeName newLogType)
+/*KeyLogger::KeyLogger(LogTypeName newLogType)
 {
      datalog = new DataLog(newLogType);
      
@@ -25,7 +25,7 @@ KeyLogger::KeyLogger(LogTypeName newLogType)
      datalog->log("------------------------------------------------------------------------\n");
      
      objPointer = this;
-}
+}*/
 
 bool KeyLogger::isCapsLock()
 {

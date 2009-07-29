@@ -1,10 +1,6 @@
-Change Log 1.2
+Change Log 1.3
 --------------
 
-Added support to log long keystrokes (hold key down)
-
-Added support to properly capture letters with combinations of the shift keys and caps lock key
-
-Reorganized directory layout
-
-Added support for compiling the executable with an icon.
+* Finished LogType Class
+* Redesigned architecture to force creation of logtype object in main file
+* Removed DataLog class. Migrated code to derived LogType classes

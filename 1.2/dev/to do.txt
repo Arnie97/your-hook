@@ -9,3 +9,17 @@ check bug tracker
 check feature requests
 
 allow to compile with many different icons to help hiding in whatever fashion (check legality of supplying windows icons)
+
+re-time stamp log file every so often
+
+in order to allow log types to utilize timers, may need to make a seperate hook
+
+
+    *add support for command line paramaters that let the app react different
+        could optionaly email data, or could run in debug mode, etc
+
+destructor not called for logtype in program exit
+
+maybe email sending should interface with localfile logtype
+
+add support for better log hiding
