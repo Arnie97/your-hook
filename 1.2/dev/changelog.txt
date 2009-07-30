@@ -1,6 +1,0 @@
-Change Log 1.3
---------------
-
-* Finished LogType Class
-* Redesigned architecture to force creation of logtype object in main file
-* Removed DataLog class. Migrated code to derived LogType classes
