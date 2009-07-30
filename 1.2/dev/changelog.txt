@@ -1,0 +1,10 @@
+Change Log 1.2
+--------------
+
+Added support to log long keystrokes (hold key down)
+
+Added support to properly capture letters with combinations of the shift keys and caps lock key
+
+Reorganized directory layout
+
+Added support for compiling the executable with an icon.
