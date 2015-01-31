@@ -25,9 +25,16 @@ Const SWP_NOMOVE = &H2
 Private Declare Function SetWindowPos Lib "user32" _
     (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
+Const WM_SYSCOMMAND = &H112
+Const SC_MONITORPOWER = &HF170&
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" _
+    (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+
 Private Sub Form_Load()
     Dim lOrignalWindowStyle As Long
     With Me
+        .ForeColor = vbWhite
+        .BackColor = vbBlack
         .Width = Screen.Width
         .Height = Screen.Height
         .WindowState = vbMaximized
@@ -35,4 +42,6 @@ Private Sub Form_Load()
     lOrignalWindowStyle = GetWindowLong(Me.hwnd, GWL_STYLE)
     Call SetWindowLong(Me.hwnd, GWL_STYLE, lOrignalWindowStyle Xor WS_CAPTION Xor WS_THICKFRAME)
     Call SetWindowPos(Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+    Call SendMessage(Me.hwnd, WM_SYSCOMMAND, SC_MONITORPOWER, ByVal 2)
+    Call SendMessage(Me.hwnd, WM_SYSCOMMAND, SC_MONITORPOWER, ByVal -1)
 End Sub
