@@ -1,5 +1,9 @@
 VERSION 5.00
 Begin VB.Form frmMain
+    Begin VB.Timer tmrClock
+    End
+    Begin VB.Label lblList 
+    End
 End
 Attribute VB_Name = "frmMain"
 Attribute VB_GlobalNameSpace = False
@@ -39,9 +43,27 @@ Private Sub Form_Load()
         .Height = Screen.Height
         .WindowState = vbMaximized
     End With
+    With lblList
+        .ForeColor = vbWhite
+        .BackColor = vbBlack
+        .Width = Screen.Width
+        .Height = Screen.Height
+        .Alignment = vbCenter
+        .Visible = False
+        .Font.Name = "Consolas"
+        .Font.Size = 16
+    End With
     lOrignalWindowStyle = GetWindowLong(Me.hwnd, GWL_STYLE)
     Call SetWindowLong(Me.hwnd, GWL_STYLE, lOrignalWindowStyle Xor WS_CAPTION Xor WS_THICKFRAME)
     Call SetWindowPos(Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
     Call SendMessage(Me.hwnd, WM_SYSCOMMAND, SC_MONITORPOWER, ByVal 2)
     Call SendMessage(Me.hwnd, WM_SYSCOMMAND, SC_MONITORPOWER, ByVal -1)
+    tmrClock.Interval = 1000
+End Sub
+
+Private Sub tmrClock_Timer()
+    With lblList
+        .Visible = True
+        .Caption = Format(Now, "yyyy/dd/mm ddd hh:mm:ss")
+    End With
 End Sub
