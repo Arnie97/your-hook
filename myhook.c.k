@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #define play(file) PlaySound(file ".wav", NULL, SND_FILENAME | SND_ASYNC)
+#define is_toggled(key) (GetKeyState(key) & 0x0001)
 
 static bool scroll_toggled
 
@@ -49,7 +50,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam):
         ((KBDLLHOOKSTRUCT *)lParam)->vkCode == VK_SCROLL &&
 
         // And the status of scroll lock is changed
-        scroll_toggled != GetKeyState(VK_SCROLL) & 0x0001
+        scroll_toggled != is_toggled(VK_SCROLL)
     ):
         scroll_toggled = !scroll_toggled
 
@@ -65,6 +66,9 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam):
 
 
 int main(void):
+    // Initialize the status flag of scroll lock
+    scroll_toggled = is_toggled(VK_SCROLL)
+
     // Retrieve the applications instance
     HINSTANCE app_instance = GetModuleHandle(NULL)
 
